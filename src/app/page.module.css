@@ -1,0 +1,622 @@
+.page {
+  --surface: rgba(30, 12, 56, 0.55);
+  --panel-2: rgba(255, 255, 255, 0.05);
+  --text: #f5f0ff;
+  --muted: #b6a6d9;
+  --x-color: #c084fc;
+  --o-color: #ff3b3b;
+  --accent-start: #7c3ff2;
+  --accent-end: #e855de;
+  --border: rgba(168, 85, 247, 0.35);
+
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse 900px 600px at 50% 15%, #3a0f66 0%, #1a0533 45%, #05000f 100%);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  padding: 24px;
+}
+
+.bgDecor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ringWrap {
+  position: absolute;
+  top: 50%;
+  width: 420px;
+  height: 420px;
+  transform: translateY(-50%);
+}
+.ringWrap.ringLeft {
+  left: -220px;
+}
+.ringWrap.ringRight {
+  right: -220px;
+}
+
+.ringGlowPulse {
+  position: absolute;
+  inset: 50px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.35), transparent 70%);
+  animation: pulseRing 4s ease-in-out infinite;
+}
+
+.ringOuter,
+.ringInner {
+  position: absolute;
+  inset: 0;
+}
+.ringOuter {
+  animation: spinCW 46s linear infinite;
+}
+.ringInner {
+  animation: spinCCW 30s linear infinite;
+}
+
+.ringSvg {
+  width: 100%;
+  height: 100%;
+}
+.ringOuter .ringSvg circle {
+  fill: none;
+  stroke: #a855f7;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-dasharray: 46 16 12 16 64 12 22 16;
+  opacity: 0.55;
+  filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.55));
+}
+.ringInner .ringSvg circle {
+  fill: none;
+  stroke: #e855de;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 30 12 18 12 42 18;
+  opacity: 0.5;
+  filter: drop-shadow(0 0 10px rgba(232, 85, 222, 0.5));
+}
+
+.ringSpark {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 14px 4px rgba(255, 255, 255, 0.9), 0 0 26px 10px rgba(232, 85, 222, 0.6);
+}
+
+@keyframes spinCW {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinCCW {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes pulseRing {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.08);
+  }
+}
+
+.circuitFade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 160px;
+  background-image: linear-gradient(90deg, rgba(168, 85, 247, 0.16) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(168, 85, 247, 0.16) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+}
+
+.iconSlot {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconPulse {
+  position: absolute;
+  width: 160%;
+  height: 160%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--pulse-color, rgba(232, 85, 222, 0.5)), transparent 70%);
+  animation: pulseIcon 3.4s ease-in-out infinite;
+}
+
+.pulsePurple {
+  --pulse-color: rgba(168, 85, 247, 0.55);
+}
+.pulsePink {
+  --pulse-color: rgba(232, 85, 222, 0.55);
+}
+.pulseRed {
+  --pulse-color: rgba(255, 59, 59, 0.5);
+}
+.pulseBlue {
+  --pulse-color: rgba(59, 130, 246, 0.45);
+}
+
+.icon {
+  position: relative;
+  color: #d9a6ff;
+  opacity: 0.6;
+  filter: drop-shadow(0 0 8px rgba(232, 85, 222, 0.6)) drop-shadow(0 0 16px rgba(124, 63, 242, 0.4));
+  animation: floatGlow 7s ease-in-out infinite;
+}
+.icon path,
+.icon circle,
+.icon rect,
+.icon ellipse {
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.slotGamepad {
+  top: 9%;
+  left: 7%;
+}
+.slotGamepad .icon {
+  width: 68px;
+  animation-delay: 0s;
+}
+
+.slotDice {
+  top: 11%;
+  right: 7%;
+}
+.slotDice .icon {
+  width: 46px;
+  animation-delay: 1.4s;
+}
+
+.slotJoystick {
+  bottom: 13%;
+  left: 9%;
+}
+.slotJoystick .icon {
+  width: 48px;
+  animation-delay: 0.7s;
+}
+
+.slotTrophy {
+  bottom: 11%;
+  right: 8%;
+}
+.slotTrophy .icon {
+  width: 52px;
+  animation-delay: 2.1s;
+}
+
+.slotHeadset {
+  top: 36%;
+  left: 3%;
+}
+.slotHeadset .icon {
+  width: 50px;
+  animation-delay: 2.8s;
+}
+
+.slotCrosshair {
+  top: 38%;
+  right: 3%;
+}
+.slotCrosshair .icon {
+  width: 44px;
+  animation-delay: 1s;
+}
+
+.slotStar {
+  bottom: 36%;
+  left: 2%;
+}
+.slotStar .icon {
+  width: 40px;
+  animation-delay: 3.4s;
+}
+
+.slotPower {
+  bottom: 34%;
+  right: 2%;
+}
+.slotPower .icon {
+  width: 34px;
+  animation-delay: 1.8s;
+}
+
+@keyframes floatGlow {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translate(6px, -16px) rotate(6deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-5px, -24px) rotate(-5deg);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translate(-9px, -8px) rotate(4deg);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.4;
+  }
+}
+
+@keyframes pulseIcon {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.2);
+  }
+}
+
+@media (max-width: 700px) {
+  .iconSlot,
+  .ringWrap {
+    display: none;
+  }
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+  color: #fdfbff;
+  text-shadow: 0 0 18px rgba(232, 85, 222, 0.55), 0 0 36px rgba(124, 63, 242, 0.35);
+}
+
+.titleAccent {
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.panel {
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(5, 0, 15, 0.55), 0 0 40px rgba(124, 63, 242, 0.15);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.modeHeading {
+  margin-top: 0;
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.diffHeading {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.modeButtons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  flex: 1 1 auto;
+  min-width: 120px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  transform: translateY(-1px);
+}
+.btn:active {
+  transform: translateY(0);
+}
+
+.primary {
+  position: relative;
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  border-color: transparent;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(124, 63, 242, 0.45);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+}
+.primary::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.4) 0 2px, transparent 2px 4px);
+  clip-path: polygon(0 100%, 100% 100%, 0 0);
+  pointer-events: none;
+}
+.primary:hover {
+  background: linear-gradient(135deg, #6d2fe0, #dc3fcf);
+}
+
+.subtle {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--border);
+}
+
+.diff.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.diff.locked:hover {
+  background: var(--panel-2);
+  transform: none;
+}
+
+.difficultyWrap {
+  margin-top: 22px;
+}
+.hint {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 10px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+.scoreboard {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+.scoreCell {
+  flex: 1;
+  background: var(--panel-2);
+  border-radius: 12px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--border);
+}
+.scoreLabel {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.scoreValue {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.scoreCell.x .scoreValue {
+  color: var(--x-color);
+}
+.scoreCell.o .scoreValue {
+  color: var(--o-color);
+}
+
+.badge {
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.status {
+  min-height: 24px;
+  margin: 8px 0 16px;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.boardWrap {
+  position: relative;
+  margin: 0 auto 20px;
+  max-width: 320px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.boardDim {
+  opacity: 0.35;
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+.resultOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.resultCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 22px 30px;
+  border-radius: 20px;
+  text-align: center;
+  background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+  box-shadow: 0 16px 36px rgba(124, 63, 242, 0.5);
+  animation: cardPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.resultShout {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #fff;
+}
+
+.resultSub {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.22);
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+
+@keyframes cardPop {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.cell {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-size: 2.4rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+  color: var(--text);
+}
+
+.cell:hover:not(.taken):not(.disabled) {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(232, 85, 222, 0.6);
+}
+.cell.taken,
+.cell.disabled {
+  cursor: default;
+}
+.cell.x {
+  color: var(--x-color);
+  text-shadow: 0 0 12px rgba(192, 132, 252, 0.6);
+}
+.cell.o {
+  color: var(--o-color);
+  text-shadow: 0 0 12px rgba(255, 59, 59, 0.6);
+}
+.cell.win {
+  background: linear-gradient(135deg, rgba(124, 63, 242, 0.22), rgba(232, 85, 222, 0.22));
+  border-color: var(--accent-start);
+}
+
+.cell[data-preview="X"]:not(.taken):not(.disabled):hover::after {
+  content: "X";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(192, 132, 252, 0.35);
+}
+.cell[data-preview="O"]:not(.taken):not(.disabled):hover::after {
+  content: "O";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 59, 59, 0.35);
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 380px) {
+  .cell {
+    font-size: 1.9rem;
+  }
+  .resultShout {
+    font-size: 1.3rem;
+  }
+  .title {
+    font-size: 1.9rem;
+  }
+}
