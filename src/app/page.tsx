@@ -23,6 +23,33 @@ const WIN_LINES = [
 const STORAGE_KEY = "ttt-save-v1";
 const LEVEL_NAMES = ["Easy", "Medium", "Hard"];
 
+const SPARKLES = [
+  { top: "6%", left: "15%", size: 3, delay: 0.2, duration: 3.2 },
+  { top: "14%", left: "42%", size: 2, delay: 1.1, duration: 2.8 },
+  { top: "22%", left: "68%", size: 3, delay: 0.5, duration: 3.6 },
+  { top: "9%", left: "85%", size: 2, delay: 2.0, duration: 3.0 },
+  { top: "30%", left: "5%", size: 2, delay: 1.6, duration: 2.6 },
+  { top: "35%", left: "92%", size: 3, delay: 0.8, duration: 3.4 },
+  { top: "48%", left: "25%", size: 2, delay: 2.4, duration: 2.9 },
+  { top: "52%", left: "75%", size: 3, delay: 0.3, duration: 3.1 },
+  { top: "60%", left: "12%", size: 2, delay: 1.9, duration: 2.7 },
+  { top: "65%", left: "88%", size: 3, delay: 1.2, duration: 3.5 },
+  { top: "72%", left: "35%", size: 2, delay: 0.6, duration: 3.0 },
+  { top: "78%", left: "60%", size: 3, delay: 2.2, duration: 2.8 },
+  { top: "85%", left: "20%", size: 2, delay: 0.9, duration: 3.3 },
+  { top: "88%", left: "80%", size: 3, delay: 1.5, duration: 2.6 },
+  { top: "18%", left: "55%", size: 2, delay: 0.4, duration: 2.9 },
+  { top: "5%", left: "60%", size: 3, delay: 1.8, duration: 3.4 },
+  { top: "95%", left: "45%", size: 2, delay: 1.0, duration: 2.7 },
+  { top: "25%", left: "20%", size: 3, delay: 2.5, duration: 3.1 },
+  { top: "58%", left: "42%", size: 2, delay: 0.7, duration: 2.8 },
+  { top: "10%", left: "30%", size: 2, delay: 1.4, duration: 3.3 },
+  { top: "44%", left: "8%", size: 3, delay: 2.1, duration: 2.9 },
+  { top: "68%", left: "55%", size: 2, delay: 0.1, duration: 3.0 },
+  { top: "92%", left: "65%", size: 3, delay: 1.7, duration: 2.6 },
+  { top: "40%", left: "50%", size: 2, delay: 2.7, duration: 3.2 },
+] as const;
+
 function loadSave(): { scores: { X: number; O: number; D: number }; unlocked: number } {
   const fallback = { scores: { X: 0, O: 0, D: 0 }, unlocked: 1 };
   if (typeof window === "undefined") return fallback;
@@ -346,6 +373,21 @@ export default function Home() {
             <path d="M16 2 4 22h9l-3 16 15-22h-9l3-14Z" />
           </svg>
         </div>
+
+        {SPARKLES.map((s, i) => (
+          <span
+            key={i}
+            className={styles.sparkle}
+            style={{
+              top: s.top,
+              left: s.left,
+              width: s.size,
+              height: s.size,
+              animationDelay: `${s.delay}s`,
+              animationDuration: `${s.duration}s`,
+            }}
+          />
+        ))}
       </div>
 
       <div className={styles.app}>
