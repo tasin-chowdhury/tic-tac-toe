@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
+import { playDrawSound, playMoveSound, playWinSound, primeAudio, startMusic, stopMusic, vibrate } from "./feedback";
 
 type Player = "X" | "O";
 type Cell = Player | null;
@@ -50,8 +51,8 @@ const SPARKLES = [
   { top: "40%", left: "50%", size: 2, delay: 2.7, duration: 3.2 },
 ] as const;
 
-function loadSave(): { scores: { X: number; O: number; D: number }; unlocked: number } {
-  const fallback = { scores: { X: 0, O: 0, D: 0 }, unlocked: 1 };
+function loadSave(): { scores: { X: number; O: number; D: number }; unlocked: number; musicOn: boolean; sfxOn: boolean } {
+  const fallback = { scores: { X: 0, O: 0, D: 0 }, unlocked: 1, musicOn: true, sfxOn: true };
   if (typeof window === "undefined") return fallback;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -60,6 +61,8 @@ function loadSave(): { scores: { X: number; O: number; D: number }; unlocked: nu
     return {
       scores: data.scores ?? fallback.scores,
       unlocked: data.unlocked ?? fallback.unlocked,
+      musicOn: data.musicOn ?? fallback.musicOn,
+      sfxOn: data.sfxOn ?? fallback.sfxOn,
     };
   } catch {
     return fallback;
@@ -155,6 +158,8 @@ export default function Home() {
   const [activeLevel, setActiveLevel] = useState(1);
   const [unlocked, setUnlocked] = useState(() => loadSave().unlocked);
   const [scores, setScores] = useState(() => loadSave().scores);
+  const [musicOn, setMusicOn] = useState(() => loadSave().musicOn);
+  const [sfxOn, setSfxOn] = useState(() => loadSave().sfxOn);
 
   const [board, setBoard] = useState<Board>(Array(9).fill(null));
   const [current, setCurrent] = useState<Player>("X");
@@ -171,8 +176,14 @@ export default function Home() {
       mounted.current = true;
       return;
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ scores, unlocked }));
-  }, [scores, unlocked]);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ scores, unlocked, musicOn, sfxOn }));
+  }, [scores, unlocked, musicOn, sfxOn]);
+
+  useEffect(() => {
+    primeAudio();
+    if (musicOn) startMusic();
+    return () => stopMusic();
+  }, [musicOn]);
 
   function endGame(result: Player | null, line: number[] | null) {
     setOver(true);
@@ -189,9 +200,13 @@ export default function Home() {
       } else {
         setResultMessage("");
       }
+      if (sfxOn) playWinSound();
+      vibrate(mode === "1p" && result === "O" ? 120 : [40, 30, 40, 30, 60]);
     } else {
       setScores((prev) => ({ ...prev, D: prev.D + 1 }));
       setResultMessage("");
+      if (sfxOn) playDrawSound();
+      vibrate(80);
     }
   }
 
@@ -205,6 +220,7 @@ export default function Home() {
     const nextBoard = targetBoard.slice();
     nextBoard[idx] = player;
     setBoard(nextBoard);
+    if (sfxOn) playMoveSound(player);
 
     const line = getWinningLine(nextBoard);
     if (line) {
@@ -234,6 +250,7 @@ export default function Home() {
   function handleCellClick(idx: number) {
     if (over || board[idx]) return;
     if (mode === "1p" && current === "O") return;
+    vibrate(15);
     makeMove(idx, current, board);
   }
 
@@ -394,6 +411,23 @@ export default function Home() {
         <h1 className={styles.title}>
           Tic<span className={styles.titleAccent}>_</span>Tac<span className={styles.titleAccent}>_</span>Toe
         </h1>
+
+        <div className={styles.audioControls}>
+          <button
+            className={`${styles.audioBtn} ${musicOn ? "" : styles.audioOff}`}
+            onClick={() => setMusicOn((v) => !v)}
+            aria-label="Toggle music"
+          >
+            {musicOn ? "🎵" : "🎵🚫"}
+          </button>
+          <button
+            className={`${styles.audioBtn} ${sfxOn ? "" : styles.audioOff}`}
+            onClick={() => setSfxOn((v) => !v)}
+            aria-label="Toggle sound effects"
+          >
+            {sfxOn ? "🔊" : "🔇"}
+          </button>
+        </div>
 
         {screen === "menu" && (
           <section className={styles.panel}>

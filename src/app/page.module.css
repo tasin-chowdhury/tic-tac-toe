@@ -337,6 +337,30 @@
   color: transparent;
 }
 
+.audioControls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: -8px 0 16px;
+}
+
+.audioBtn {
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1.4;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+.audioBtn:hover {
+  transform: translateY(-1px);
+}
+.audioBtn.audioOff {
+  opacity: 0.45;
+}
+
 .panel {
   background: var(--surface);
   backdrop-filter: blur(14px);
