@@ -180,6 +180,12 @@ export default function Home() {
   }, [scores, unlocked, musicOn, sfxOn]);
 
   useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
+
+  useEffect(() => {
     primeAudio();
     if (musicOn) startMusic();
     return () => stopMusic();
